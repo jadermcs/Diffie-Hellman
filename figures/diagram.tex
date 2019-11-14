@@ -1,0 +1,51 @@
+\begin{tikzpicture}[node distance=0.7cm]
+
+\tikzstyle{square}=[draw,minimum size=20pt]
+\tikzstyle{wave}=[draw,-latex',snake=snake,segment amplitude=.4mm,segment length=3mm,line after snake=1.5mm]
+\tikzstyle{symbol}=[node distance=0.7cm]
+\tikzstyle{arrow}=[arrows={{Latex[scale=0.5]}-}, thick]
+
+\node [square, fill=red!25, label=above:Alice]   (b1) at (-2.5,0) {};
+\node [square, fill=red!25, label=above:Bob]  (b2) at (2.5,0) {};
+
+\path (b1) --  node [midway]{Cor em comum} (b2);
+
+\node [symbol]  (p1) [below of=b1] {+};
+\node [symbol]  (p2) [below of=b2] {+};
+
+\node [square, fill=yellow!25](b3) [below of=p1] {};
+\node [square, fill=blue!25](b4) [below of=p2] {};
+
+\path (b3) --  node [midway]{Cores secretas} (b4);
+
+\node [symbol]  (p3) [below of=b3] {=};
+\node [symbol]  (p4) [below of=b4] {=};
+
+\node [square, fill=orange!50](b5) [below of=p3] {};
+\node [square, fill=purple!50](b6) [below of=p4] {};
+
+\node [symbol]  (p5) [below of=b5] {};
+\node [symbol]  (p6) [below of=b6] {};
+
+\node [square, fill=purple!50](b7) [below of=p5] {};
+\node [square, fill=orange!50](b8) [below of=p6] {};
+
+\path [wave](b5) --  node [above=1.5em] {Transporte público} (b8);
+\path [wave](b6) --  node [text width=3cm,below=1em] {(separação das cores é cara)} (b7);
+
+\node [symbol]  (p7) [below of=b7] {+};
+\node [symbol]  (p8) [below of=b8] {+};
+
+\node [square, fill=yellow!25](b9) [below of=p7] {};
+\node [square, fill=blue!25](b10) [below of=p8] {};
+
+\path (b9) --  node [midway]{Cores secretas} (b10);
+
+\node [symbol]  (p9) [below of=b9] {=};
+\node [symbol]  (p10) [below of=b10] {=};
+
+\node [square, fill=brown!75](b9) [below of=p9] {};
+\node [square, fill=brown!75](b10) [below of=p10] {};
+
+\path (b9) --  node [midway]{Segredo compartilhado} (b10);
+\end{tikzpicture}

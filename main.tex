@@ -2,6 +2,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
 \usepackage{tgbonum}
+\usepackage{tikz, amsmath}
+\usetikzlibrary{arrows, arrows.meta, snakes}
+
 
 \title{Protocolo Diffie–Hellman para Troca de Chaves}
 \author{Jader Martins\\
@@ -49,7 +52,12 @@ The basic version (Protocol 12.47) provides protection in theform of secrecy of 
 
 Diffie–Hellman is used to secure a variety of Internet services. However, research published in October 2015 suggests that the parameters in use for many DH Internet applications at that time are not strong enough to prevent compromise by very well-funded attackers, such as the security services of large governments.
 
-
+\begin{figure}[htpb]
+    \centering
+    \input{figures/diagram.tex}
+    \caption{Exemplo ilustrativo do protocolo.}%
+    \label{fig:diagram}
+\end{figure}
 
 \bibliographystyle{unsrt}
 \bibliography{sample}
