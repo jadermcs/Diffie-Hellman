@@ -1,14 +1,56 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{tgbonum}
 
-\title{Esquema Diffie–Hellman para Troca de Chaves}
-\author{Jader Martins}
-\date{November 2019}
+\title{Protocolo Diffie–Hellman para Troca de Chaves}
+\author{Jader Martins\\
+        Igor Ferreira}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+\begin{abstract}
+    O esquema de troca de chaves proposto por Bailey W. Diffie e
+    Martin E. Hellman em 1976 é protocolo para realizar
+    o intercambio de chaves criptograficas por meio de um canal público
+    de forma segura\cite{Diffie}. Este é um dos primeiros protocolos de
+    chave publica, foi originalmente conceitualizado por Ralph C. Merkle
+    e sua descrição formal apresentada posteriormente pelos autores que
+    nomeam o protocolo \cite{Merkle}.
+\end{abstract}
 
+\section{Introdução}%
+\label{sec:introducao}
+No inicio da história da troca de mensagens por meio digital, comunicação
+segura entre pares requeria que de antemão fossem trocadas chaves por um
+meio fisico seguro, usualmente cartas com a chave anotadas eram
+transportadas por agentes armados e em carros-forte.
+
+O protocolo Diffie-Hellman forneceu a primeira solução viável ao problema
+de distribuição de chaves, permitindo duas partes, que inicialmente não se
+conhecem ou trocaram qualquer material, estabelecer um segredo compartilhado
+em um canal aberto, consequentemente, inseguro. A segurança se estabelece
+pela intratabilidade do problema de Diffie-Hellman e também em computar
+logarítmos discretos\cite{katz1996handbook}. Essa chave pode então
+subsequentemente ser usada para criptografia simetrica.
+
+
+\section{O Protocolo}%
+\label{sec:o_protocolo}
+
+
+
+A versão básica do protocolo prevê
+
+The basic version (Protocol 12.47) provides protection in theform of secrecy of the resulting key from passive adversaries (eavesdroppers), but not from active adversaries capable of intercepting, modifying, or injecting messages. Neither partyhas assurances of the source identity of the incoming message or the identity of the partywhich may know the resulting key, i.e., entity authentication or key authentication.
+
+Diffie–Hellman is used to secure a variety of Internet services. However, research published in October 2015 suggests that the parameters in use for many DH Internet applications at that time are not strong enough to prevent compromise by very well-funded attackers, such as the security services of large governments.
+
+
+
+\bibliographystyle{unsrt}
+\bibliography{sample}
 \end{document}
