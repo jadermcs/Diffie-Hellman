@@ -190,7 +190,7 @@ a chave $\beta$ não é conhecida por ninguém além de Bob e a chave $\omega$ n
 é conhecida por ninguém além do par Alice-Bob, na tabela \ref{tab:alicebob} é
 apresentada uma descrição detalhada dos niveis de acesso das chaves.
 
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \caption{Estagios publicos/secretos das chaves trocadas.}
     \label{tab:alicebob}
@@ -200,11 +200,11 @@ apresentada uma descrição detalhada dos niveis de acesso das chaves.
     \multicolumn{2}{|c|}{Alice} &  & \multicolumn{2}{c|}{Bob} \\ \hline
        Secreto      &Público   &Envia           &Público   &Secreto   \\ \hline
        \rowcolor{LightGray}
-       \alpha       &n, m      &n, m \rightarrow&          &\beta     \\ \hline
-       \alpha       &n, m, A   &A \rightarrow   &n, m      &\beta     \\ \hline
+       $\alpha$       &n, m      &n, m $\rightarrow$&          &$\beta$     \\ \hline
+       $\alpha$       &n, m, A   &A $\rightarrow$   &n, m      &$\beta$     \\ \hline
        \rowcolor{LightGray}
-       \alpha       &n, m, A   &B \leftarrow    &n, m, A, B&\beta     \\ \hline
-       \alpha,\omega&n, m, A, B&                &n, m, A, B&\beta,\omega\\ \hline
+       $\alpha$       &n, m, A   &B $\leftarrow$    &n, m, A, B&$\beta$     \\ \hline
+       $\alpha$,$\omega$&n, m, A, B&                &n, m, A, B&$\beta$,$\omega$\\ \hline
     \end{tabular}
 \end{table}
 
