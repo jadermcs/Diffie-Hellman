@@ -16,38 +16,65 @@
 \maketitle
 
 \begin{abstract}
-    O esquema de troca de chaves proposto por Bailey W. Diffie e
-    Martin E. Hellman em 1976 é protocolo para realizar
+    O esquema de troca de chaves proposto por Whitfield Diffie e
+    Martin Hellman em 1976 é protocolo para realizar
     o intercambio de chaves criptograficas por meio de um canal público
     de forma segura\cite{Diffie}. Este é um dos primeiros protocolos de
-    chave publica, foi originalmente conceitualizado por Ralph C. Merkle
+    chave publica, foi originalmente conceitualizado por Ralph Merkle
     e sua descrição formal apresentada posteriormente pelos autores que
     nomeam o protocolo \cite{Merkle}.
 \end{abstract}
 
 \section{Introdução}%
 \label{sec:introducao}
+A comunicação secreta é o estabelecimento de um meio de comunicação entre pares
+tal que uma terceira parte, também chamado adversário, tenha acesso mínimo ao
+conteúdo que esta sendo intercambiado nesse meio.
+
+Tal atividade e seu aprimoramento datam da grécia
+antiga\cite{katz2014introduction}, em grande parte, esses segredos eram
+estabelecidos pela substituição trivial de letras, cifração, da mensagem em que
+apriori eram estabelecidas as regras de substituição e como seria recuperado a
+mensagem original. Esses esquemas posteriormente apresentaram diversas
+limitações, pois conhecendo o esquema, se tornava trivial a decifração da
+mensagem.
+
+Com o surgimento de máquinas automáticas e subsequentemente computadores, a
+comunicação segura precisou ser reinventada\cite{singh1999code}, tais mecanismo
+permitiam facilmente quebrar esquemas antigos porém propiciaram novas formas de
+se codificar mensagens secretas.
+
+%%% FALAR DE SEGREDO PERFEITO E LIMITACOES E DEPOIS IR PARA CHAVES SIMETRICAS
+
 Inicialmente a comunicação segura entre pares requeria que de antemão fossem
-trocadas chaves por um meio fisico seguro, usualmente cartas com a chave
-anotadas eram transportadas por agentes armados e em carros-forte.
+trocadas chaves por um meio fisico seguro, usualmente, cartas com a chave
+anotadas eram transportadas por entregadores de confiança, esses usavam de
+protocolos caros e complexos\cite{matsumoto1987key}.
+
+Tal ritual seria impraticável para grupos que detinham pouco poder economico,
+surgindo então a busca por formas praticáveis de se distribuir chaves para o
+estabelecimento de comunicação segura, dessa busca surgiram os trabalhos de
+Ralph Merkle, Whitfield Diffie e Martin Hellman.
 
 O protocolo Diffie-Hellman forneceu a primeira solução viável ao problema
 de distribuição de chaves, permitindo duas partes, que inicialmente não se
 conhecem ou trocaram qualquer material, estabelecer um segredo compartilhado
-em um canal aberto, consequentemente, inseguro. A segurança se estabelece
-pela intratabilidade do problema de Diffie-Hellman e também em computar
-logarítmos discretos\cite{katz1996handbook}. Essa chave pode então
-subsequentemente ser usada para criptografia simetrica.
-
+(uma chave de encriptação) em um canal aberto, essa chave pode então
+subsequentemente ser usada para criptografia simetrica. A segurança se
+estabelece pela intratabilidade do problema de Diffie-Hellman e computação de
+logarítmos discretos\cite{katz1996handbook}.
 
 \section{O Protocolo}%
 \label{sec:o_protocolo}
 
 
 
-A versão básica do protocolo prevê
-
-The basic version (Protocol 12.47) provides protection in theform of secrecy of the resulting key from passive adversaries (eavesdroppers), but not from active adversaries capable of intercepting, modifying, or injecting messages. Neither partyhas assurances of the source identity of the incoming message or the identity of the partywhich may know the resulting key, i.e., entity authentication or key authentication.
+A versão básica do protocolo (12.47), provê proteção na forma de gerar uma
+chave em comum entre os pares, de forma que um adversário passivo não a obtenha,
+porém o protocolo não garante proteção contra um adversário ativo, esse capaz
+de interceptar, modificar ou injetar mensagens. Nenhuma das partes tem
+garantias da identidade da fonte da mensagem recebida ou da parte que saberá
+a chave resultante.
 
 Diffie–Hellman is used to secure a variety of Internet services. However, research published in October 2015 suggests that the parameters in use for many DH Internet applications at that time are not strong enough to prevent compromise by very well-funded attackers, such as the security services of large governments.
 
