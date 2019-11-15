@@ -1,10 +1,12 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
+\usepackage{tikz, tikzpeople}
+\usepackage{amsmath, amsthm, amsfonts}
 \usepackage{tgbonum}
-\usepackage{tikz, amsmath}
 \usetikzlibrary{arrows, arrows.meta, snakes}
 
+\newtheorem*{definition}{Definição}
 
 \title{Protocolo Diffie–Hellman para Troca de Chaves}
 \author{Jader Martins\\
@@ -61,8 +63,10 @@ de distribuição de chaves, permitindo duas partes, que inicialmente não se
 conhecem ou trocaram qualquer material, estabelecer um segredo compartilhado
 (uma chave de encriptação) em um canal aberto, essa chave pode então
 subsequentemente ser usada para criptografia simetrica. A segurança se
-estabelece pela intratabilidade do problema de Diffie-Hellman e computação de
-logarítmos discretos\cite{katz1996handbook}.
+estabelece pela intratabilidade do problema de
+Diffie-Hellman\cite{katz1996handbook} e computação de logarítmos
+discretos\footnote{A dificultade de se computar logarítmos discretos e
+apresentada na seção \ref{sub:logaritmo_discreto}}.
 
 \section{O Protocolo}%
 \label{sec:o_protocolo}
@@ -80,36 +84,44 @@ Posteriormente o protocolo foi aprimorado para resistir a adversários ativos.
 %%FALAR DE FORMA BREVE COMO RESISTE A ADVERSARIOS ATIVOS
 
 \subsection{Exemplo Ilustrativo}%
-\label{sub:exemplo}
+\label{sub:exemplo_ilustrativo}
 Para o exemplo ilustrativo, supomos que dois entes, Alice e Bob, querem pintar
-seus quartos de uma mesma cor sem que Carol, que busca impedir essa amizade,
-possa descobrir tal cor. Analogamente, as cores são chaves, e a separação das
-cores, tem alto custo, o que em condições ideáis inviabiliza a Carol de obter
-as cores secretas e a cor compartilhada.
+seus quartos de uma mesma cor sem que Charlie, que busca impedir essa amizade,
+possa descobrir tal cor, figura \ref{fig:abc}. Analogamente, as cores são
+chaves, e a separação das cores, tem alto custo, o que em condições ideáis
+inviabiliza Charlie de obter as cores secretas e a cor compartilhada.
+
+\begin{figure}[htpb]
+    \centering
+    \input{figures/alicebob.tex}
+    \caption{Charlie ouvindo o dialogo de Alice e Bob.}%
+    \label{fig:abc}
+\end{figure}
 
 O processo é iniciado com Alice e Bob, primeiramente eles definem
 uma cor em comum arbitrária, no caso da figura \ref{fig:diagram}, rosa, essa
-a qual não é preciso ser mantida em segredo de Carol. Em seguida cada um deles
+a qual não é preciso ser mantida em segredo de Charlie. Em seguida cada um deles
 escolhe uma cor secreta para si, no exemplo, Alice escolhe amarelo e Bob
 escolhe azul, então essas cores são combinadas as cores que ambos compartilham,
 rosa. Para Alice é gerada a cor laranja e para Bob é gerada a cor roxa.
 
 Aqui está a parte essencial do processo, essa terceira cor é trocada entre
-Alice e Bob em um meio público, por exemplo, no parquinho onde Carol também
-brinca. Mesmo que Carol saiba a cor inicial, rosa, e a cor que foi trocada no
-parquinho, laranja e roxo, Carol não conseguirá obter as cores secretas de
+Alice e Bob em um meio público, por exemplo, no parquinho onde Charlie também
+brinca. Mesmo que Charlie saiba a cor inicial, rosa, e a cor que foi trocada no
+parquinho, laranja e roxo, Charlie não conseguirá obter as cores secretas de
 Alice e Bob. Alice obtendo a cor de Bob e Bob de Alice, esses a adicionam sua
 cor secreta inicial, gerando assim a cor marrom identica para ambos.
 
 No cenário ideal, apenas Bob e Alice terão a cor marrom em comum, podendo assim
-usa-las exclusivamente, sem que Carol a descubra. Voltando a analogia inicial,
+usa-las exclusivamente, sem que Charlie a descubra. Voltando a analogia inicial,
 a cor rosa seria uma chave compartilhada públicamente entre Alice e Bob, as
 cores secretas seriam as chaves exclusivas de Alice e Bob, o valor resultante
 da operação de ambos poderia ser compartilhado em um canal qualquer que a
-construção para a chave final ainda dependeria das chaves exclusivas. A cor
-marrom, por fim, seria a chave para encriptar as mensagens trocadas que apenas
-Alice e Bob teriam, dado que seria computacionalmente inviável descobrir as
-chaves secretas.
+construção para a chave final ainda dependeria das chaves exclusivas.
+
+A cor marrom, por fim, seria a chave para encriptar as mensagens trocadas que
+apenas Alice e Bob teriam, dado que seria computacionalmente inviável descobrir
+as chaves secretas.
 
 
 \begin{figure}[htpb]
@@ -119,10 +131,91 @@ chaves secretas.
     \label{fig:diagram}
 \end{figure}
 
-\subsection{Descrição formal}%
-\label{sub:descricao_formal}
+\subsection{Exemplo descritivo}%
+\label{sub:exemplo_descritivo}
+A implementação original do protocolo\cite{Diffie}, usa as propriedades da
+aritmética modular, sejam os inteiros coprimos a $n$ do conjunto
+${0, 1, ..., n-1}$ de $n$ inteiros positivos formam um grupo sob a
+multiplicação modulo $n$, chamado \textit{grupo multiplicativo de inteiros
+modulo n}. Se $n$ for primo, $m$ é uma raiz primitiva modulo $n$. Esses dois
+valores são escolhidos dessa forma para garantir que o segredo compartilhado
+resultante pode assumir qualquer valor entre $1$ e $n-1$. Usaremos letra
+latinas para publico e gregas para privado:
 
+\begin{itemize}
+    \item Alice e Bob publicamente concordam em usar $\boldsymbol{n = 23}$ e
+        $\boldsymbol{m = 5}$ (raiz primitiva 5 modulo 23), como chaves.
+    \item Alice escolhe uma chave secreta $\alpha=4$, e então manda para Bob o
+        resultado de $A = {m}^{\alpha}\bmod n$.
+        \begin{equation}
+            A = 5^4\bmod23 = 4
+        \end{equation}
+    \item Bob escolhe uma chave secreta $\beta=3$, e então manda para Alice o
+        resultado de $B = {m}^{\beta}\bmod n$.
+        \begin{equation}
+            B = 5^3\bmod23 = 10
+        \end{equation}
+    \item Alice computa o segredo compartilhado ($\omega$), $B^\alpha \bmod n$.
+        \begin{equation}
+            \omega = 10^4\bmod23 = 18
+        \end{equation}
+    \item Bob computa o segredo compartilhado ($\omega$), $A^\beta \bmod n$.
+        \begin{equation}
+            \omega = 4^3\bmod23 = 18
+        \end{equation}
+    \item Por fim Alice e Bob compartilham a mesma chave secreta $\omega = 18$.
+\end{itemize}
 
+Ambos chegam a mesma chave $\omega$, porque, sobre $\bmod n$, segue que,
+
+\begin{equation}
+    A^{\beta}\bmod n = m^{\alpha\beta}\bmod n = m^{\beta\alpha}\bmod n = B^{\alpha}\bmod n
+\end{equation}
+
+De forma simplificada,
+
+\begin{equation}
+    (m ^\alpha \bmod n)^\beta \bmod n = (m^\beta \bmod n)^\alpha \bmod n
+\end{equation}
+
+Nesse esquema é visto que a chave $\alpha$ não é conhecido por ninguém alem de Alice,
+a chave $\beta$ não é conhecida por ninguém além de Bob e a chave $\omega$ não
+é conhecida por ninguém além do par Alice-Bob.
+
+\section{Conclusão}%
+\label{sec:conclusao}
+
+\section{Notas}%
+\label{sec:notas}
+Nesta seção são apresentados topicos externos que estão relacionados ao
+viabilidade e implementação do protocolo Diffie-Hellman.
+
+\subsection{Logaritmo Discreto}%
+\label{sub:logaritmo_discreto}
+Em teoria dos números, o logarítmo discreto de $\log_{b}{a}$ é algum inteiro
+$k$ tal que $b^k=a$. Logarítmos discretos são rapidamente computaveis em apenas
+alguns casos especiais. Entretanto, nenhum método eficiente é conhecido para
+a computação do caso geral. Muitos algoritmos de criptografia residem na
+dificuldade intrinseca da reversão em k e são escolhidos de forma que não se
+situem nos casos de solução eficiente.
+
+\begin{definition}
+    Seja $G$ um grupo que tem por operador a multiplicação e por elemento
+    identidade $1$. Sendo $k$ um elemento de G para qualquer
+    $k \in \mathbb{N}$ a expressão $b^k$ denota o produto de $b$ por ele mesmo
+    $k$-vezes:
+
+    \[
+    b^{k}=\underbrace{b\cdot b\cdots b}_{k\text{vezes}}
+    \]
+    Similarmente, $b^{-k}$ denota o produto de $b^{-1}$ com si mesmo $k$-vezes.
+    Para $k=0$, a $k$-esima potencia é a identidade, $b^0=1$
+
+    Seja $a$ também um elemento de G. Um inteiro k, resolve a equação $b^k=a$ é
+    definido como logaritmo discrete, também escrito da forma $k=\log_b{a}$.
+\end{definition}
+
+%%% EXPLICAR PORQUE DIFICIL COMPUTAR O K
 
 \bibliographystyle{unsrt}
 \bibliography{sample}

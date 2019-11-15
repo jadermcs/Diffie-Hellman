@@ -1,0 +1,7 @@
+\begin{tikzpicture}[every node/.style={minimum width=1.5cm}]
+\node[alice] (alice) {Alice};
+\node[bob, right= 4cm of alice, mirrored] (bob) {Bob};
+\draw[>=stealth',<->,thick] (alice) -- coordinate[near start, label=below:COR] (aux) (bob);
+\node[charlie, mirrored, above right=-5mm and 1cm of alice,label=above:Charlie] (charlie) {};
+\draw[->, thick] (charlie)--(aux);
+\end{tikzpicture}
