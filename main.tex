@@ -42,14 +42,14 @@ mensagem.
 Com o surgimento de máquinas automáticas e subsequentemente computadores, a
 comunicação segura precisou ser reinventada\cite{singh1999code}, tais mecanismo
 permitiam facilmente quebrar esquemas antigos porém propiciaram novas formas de
-se codificar mensagens secretas.
+se codificar mensagens secretas\cite{Diffie}.
 
-%%% FALAR DE SEGREDO PERFEITO E LIMITACOES E DEPOIS IR PARA CHAVES SIMETRICAS
+%%% FALAR DE SEGREDO PERFEITO E LIMITACOES E DEPOIS INTRODUZIR CHAVES SIMETRICAS
 
 Inicialmente a comunicação segura entre pares requeria que de antemão fossem
 trocadas chaves por um meio fisico seguro, usualmente, cartas com a chave
 anotadas eram transportadas por entregadores de confiança, esses usavam de
-protocolos caros e complexos\cite{matsumoto1987key}.
+protocolos caros e complexos\cite{matsumoto1987key,Merkle}.
 
 Tal ritual seria impraticável para grupos que detinham pouco poder economico,
 surgindo então a busca por formas praticáveis de se distribuir chaves para o
@@ -69,14 +69,48 @@ logarítmos discretos\cite{katz1996handbook}.
 
 
 
-A versão básica do protocolo (12.47), provê proteção na forma de gerar uma
-chave em comum entre os pares, de forma que um adversário passivo não a obtenha,
+A versão básica do protocolo, provê proteção na forma de gerar uma
+chave em comum entre os pares, sendo que um adversário passivo não a obtenha,
 porém o protocolo não garante proteção contra um adversário ativo, esse capaz
 de interceptar, modificar ou injetar mensagens. Nenhuma das partes tem
 garantias da identidade da fonte da mensagem recebida ou da parte que saberá
-a chave resultante.
+a chave resultante\cite{katz1996handbook}.
 
-Diffie–Hellman is used to secure a variety of Internet services. However, research published in October 2015 suggests that the parameters in use for many DH Internet applications at that time are not strong enough to prevent compromise by very well-funded attackers, such as the security services of large governments.
+Posteriormente o protocolo foi aprimorado para resistir a adversários ativos.
+%%FALAR DE FORMA BREVE COMO RESISTE A ADVERSARIOS ATIVOS
+
+\subsection{Exemplo Ilustrativo}%
+\label{sub:exemplo}
+Para o exemplo ilustrativo, supomos que dois entes, Alice e Bob, querem pintar
+seus quartos de uma mesma cor sem que Carol, que busca impedir essa amizade,
+possa descobrir tal cor. Analogamente, as cores são chaves, e a separação das
+cores, tem alto custo, o que em condições ideáis inviabiliza a Carol de obter
+as cores secretas e a cor compartilhada.
+
+O processo é iniciado com Alice e Bob, primeiramente eles definem
+uma cor em comum arbitrária, no caso da figura \ref{fig:diagram}, rosa, essa
+a qual não é preciso ser mantida em segredo de Carol. Em seguida cada um deles
+escolhe uma cor secreta para si, no exemplo, Alice escolhe amarelo e Bob
+escolhe azul, então essas cores são combinadas as cores que ambos compartilham,
+rosa. Para Alice é gerada a cor laranja e para Bob é gerada a cor roxa.
+
+Aqui está a parte essencial do processo, essa terceira cor é trocada entre
+Alice e Bob em um meio público, por exemplo, no parquinho onde Carol também
+brinca. Mesmo que Carol saiba a cor inicial, rosa, e a cor que foi trocada no
+parquinho, laranja e roxo, Carol não conseguirá obter as cores secretas de
+Alice e Bob. Alice obtendo a cor de Bob e Bob de Alice, esses a adicionam sua
+cor secreta inicial, gerando assim a cor marrom identica para ambos.
+
+No cenário ideal, apenas Bob e Alice terão a cor marrom em comum, podendo assim
+usa-las exclusivamente, sem que Carol a descubra. Voltando a analogia inicial,
+a cor rosa seria uma chave compartilhada públicamente entre Alice e Bob, as
+cores secretas seriam as chaves exclusivas de Alice e Bob, o valor resultante
+da operação de ambos poderia ser compartilhado em um canal qualquer que a
+construção para a chave final ainda dependeria das chaves exclusivas. A cor
+marrom, por fim, seria a chave para encriptar as mensagens trocadas que apenas
+Alice e Bob teriam, dado que seria computacionalmente inviável descobrir as
+chaves secretas.
+
 
 \begin{figure}[htpb]
     \centering
@@ -84,6 +118,11 @@ Diffie–Hellman is used to secure a variety of Internet services. However, rese
     \caption{Exemplo ilustrativo do protocolo.}%
     \label{fig:diagram}
 \end{figure}
+
+\subsection{Descrição formal}%
+\label{sub:descricao_formal}
+
+
 
 \bibliographystyle{unsrt}
 \bibliography{sample}
