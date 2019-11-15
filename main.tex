@@ -3,8 +3,16 @@
 \usepackage[brazilian]{babel}
 \usepackage{tikz, tikzpeople}
 \usepackage{amsmath, amsthm, amsfonts}
+\usepackage{xcolor,colortbl}
 \usepackage{tgbonum}
 \usetikzlibrary{arrows, arrows.meta, snakes}
+
+\newcommand{\mc}[2]{\multicolumn{#1}{c}{#2}}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightGray}{gray}{0.90}
+
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+\newcolumntype{b}{>{\columncolor{white}}c}
 
 \newtheorem*{definition}{Definição}
 
@@ -46,7 +54,8 @@ comunicação segura precisou ser reinventada\cite{singh1999code}, tais mecanism
 permitiam facilmente quebrar esquemas antigos porém propiciaram novas formas de
 se codificar mensagens secretas\cite{Diffie}.
 
-%%% FALAR DE SEGREDO PERFEITO E LIMITACOES E DEPOIS INTRODUZIR CHAVES SIMETRICAS
+%%% FALAR DE SEGREDO PERFEITO Não DETALHAR MUITO, REFERENCIAR
+%%% SUB:SEGREDO_PERFEITO E LIMITACOES E DEPOIS INTRODUZIR CHAVES SIMETRICAS
 
 Inicialmente a comunicação segura entre pares requeria que de antemão fossem
 trocadas chaves por um meio fisico seguro, usualmente, cartas com a chave
@@ -103,6 +112,13 @@ escolhe uma cor secreta para si, no exemplo, Alice escolhe amarelo e Bob
 escolhe azul, então essas cores são combinadas as cores que ambos compartilham,
 rosa. Para Alice é gerada a cor laranja e para Bob é gerada a cor roxa.
 
+\begin{figure}[htpb]
+    \centering
+    \input{figures/diagram.tex}
+    \caption{Exemplo ilustrativo do protocolo.}%
+    \label{fig:diagram}
+\end{figure}
+
 Aqui está a parte essencial do processo, essa terceira cor é trocada entre
 Alice e Bob em um meio público, por exemplo, no parquinho onde Charlie também
 brinca. Mesmo que Charlie saiba a cor inicial, rosa, e a cor que foi trocada no
@@ -121,13 +137,6 @@ A cor marrom, por fim, seria a chave para encriptar as mensagens trocadas que
 apenas Alice e Bob teriam, dado que seria computacionalmente inviável descobrir
 as chaves secretas.
 
-
-\begin{figure}[htpb]
-    \centering
-    \input{figures/diagram.tex}
-    \caption{Exemplo ilustrativo do protocolo.}%
-    \label{fig:diagram}
-\end{figure}
 
 \subsection{Exemplo descritivo}%
 \label{sub:exemplo_descritivo}
@@ -178,14 +187,33 @@ De forma simplificada,
 
 Nesse esquema é visto que a chave $\alpha$ não é conhecido por ninguém alem de Alice,
 a chave $\beta$ não é conhecida por ninguém além de Bob e a chave $\omega$ não
-é conhecida por ninguém além do par Alice-Bob.
+é conhecida por ninguém além do par Alice-Bob, na tabela \ref{tab:alicebob} é
+apresentada uma descrição detalhada dos niveis de acesso das chaves.
+
+\begin{table}[h]
+    \centering
+    \caption{Estagios publicos/secretos das chaves trocadas.}
+    \label{tab:alicebob}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \rowcolor{Gray}
+    \multicolumn{2}{|c|}{Alice} &  & \multicolumn{2}{c|}{Bob} \\ \hline
+       Secreto      &Público   &Envia           &Público   &Secreto   \\ \hline
+       \rowcolor{LightGray}
+       \alpha       &n, m      &n, m \rightarrow&          &\beta     \\ \hline
+       \alpha       &n, m, A   &A \rightarrow   &n, m      &\beta     \\ \hline
+       \rowcolor{LightGray}
+       \alpha       &n, m, A   &B \leftarrow    &n, m, A, B&\beta     \\ \hline
+       \alpha,\omega&n, m, A, B&                &n, m, A, B&\beta,\omega\\ \hline
+    \end{tabular}
+\end{table}
 
 \section{Conclusão}%
 \label{sec:conclusao}
 
 \section{Notas}%
 \label{sec:notas}
-Nesta seção são apresentados topicos externos que estão relacionados ao
+Nesta seção são apresentados topicos externos que estão relacionados a
 viabilidade e implementação do protocolo Diffie-Hellman.
 
 \subsection{Logaritmo Discreto}%
@@ -213,6 +241,20 @@ situem nos casos de solução eficiente.
 \end{definition}
 
 %%% EXPLICAR PORQUE DIFICIL COMPUTAR O K
+
+\subsection{Segredo Perfeito}%
+\label{sub:segredo_perfeito}
+O esquema de segredo perfeito, também conhecido (em inglês) como, \textit{
+one-time pad}, é uma tecnica de encriptação que não pode ser quebrada, mas
+requere o uso de uma chave \textit{one-time} pre-compartilha, que tenha o mesmo
+tamanho ou mais que a mensagem que está sendo compartilhada.
+
+A chave \textit{one-time} é uma chave usada uma unica vez e que tem seu
+processo de geração puramente aleatório.
+
+In this technique, a plaintext is paired with a random secret key (also referred to as a one-time pad). Then, each bit or character of the plaintext is encrypted by combining it with the corresponding bit or character from the pad using modular addition. If the key is (1) truly random, (2) at least as long as the plaintext, (3) never reused in whole or in part, and (4) kept completely secret, then the resulting ciphertext will be impossible to decrypt or break.[1][2] It has also been proven that any cipher with the property of perfect secrecy must use keys with effectively the same requirements as OTP keys.[3] Digital versions of one-time pad ciphers have been used by nations for critical diplomatic and military communication, but the problems of secure key distribution have made them impractical for most applications. 
+%%% DETALHAR SEGREDO PERFEITO
+
 
 \bibliographystyle{unsrt}
 \bibliography{sample}
