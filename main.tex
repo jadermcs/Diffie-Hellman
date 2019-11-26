@@ -1,6 +1,10 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
+\usepackage{import}
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
 \usepackage{tikz, tikzpeople}
 \usepackage{amsmath, amsthm, amsfonts}
 \usepackage{xcolor,colortbl}
@@ -17,8 +21,8 @@
 \newtheorem*{definition}{Definição}
 
 \title{Protocolo Diffie–Hellman para Troca de Chaves}
-\author{Jader Martins\\
-        Igor Figueira}
+\author{Jader Martins Camboim de Sá\footnote{Matricula: 140168915}\\
+        Igor Figueira\footnote{Matricula:}}
 \date{\today}
 
 \begin{document}
@@ -54,20 +58,21 @@ comunicação segura precisou ser reinventada\cite{singh1999code}, tais mecanism
 permitiam facilmente quebrar esquemas antigos porém propiciaram novas formas de
 se codificar mensagens secretas\cite{Diffie}.
 
-Mesmo com o enorme poderio que tais máquinas propiciaram existem limites do ponto
-de vista prático, fatores físicos, teóricos e tecnológicos a respeito da computação
-impõe limites em um dado momento do que pode ou não ser viável de ser feito por
-um computador, isso inclui a criptografia.
+Mesmo com o enorme poderio que tais máquinas propiciaram existem limites do
+ponto de vista prático, fatores físicos, teóricos e tecnológicos a respeito da
+computação impõe limites em um dado momento do que pode ou não ser viável de
+ser feito por um computador, isso inclui a criptografia.
 
-Existe um esquemas criptográficos que é seguros mesmo contra um adversário que tenha
-um poder computacional infinito, esse é chamado de segredo perfeito
+Existe um esquema criptográfico que é seguros mesmo contra um adversário que
+tenha um poder computacional ilimitado, esse é chamado de segredo perfeito
 \cite{katz2014introduction}, o qual foi introduzido por Frank Miller em
 1882\cite{frankm} e posteriormente provada sua invulnerabilidade teórica
 por Claude Shannon\cite{shannon1949communication}.
 
-De forma breve, o protocolo requere gerar um número puramente aleatório do tamanho das
-mensagens trocadas, intercambiar chaves sem vazamentos e utiliza-las apenas uma vez\footnote{Uma descrição detalhada do segredo perfeito pode ser encontrado na
-seção \ref{sub:segredo_perfeito}}.
+De forma breve, o protocolo requere gerar um número puramente aleatório do
+tamanho das mensagens trocadas, intercambiar chaves sem vazamentos e
+utiliza-las apenas uma vez\footnote{Uma descrição detalhada do segredo
+    perfeito pode ser encontrado na seção \ref{sub:segredo_perfeito}}.
 Diversas formas para os diferentes critérios foram tentadas, porém usavam de
 protocolos caros e complexos\cite{matsumoto1987key,Merkle}.
 
@@ -90,15 +95,20 @@ apresentada na seção \ref{sub:logaritmo_discreto}}.
 \label{sec:o_protocolo}
 
 A versão básica do protocolo, provê proteção na forma de gerar uma
-chave em comum entre os pares, de tal forma que um adversário passivo não a obtenha,
-porém o protocolo não garante proteção contra um adversário ativo, esse capaz
-de interceptar, modificar ou injetar mensagens.Nenhuma das partes tem
-garantias da identidade da fonte da mensagem recebida ou da parte que saberá
-a chave resultante\cite{katz1996handbook}, por isso tal protocolo falha em
-resistir a ataques de um adversário ativo como será apresentado na seção
+chave em comum entre os pares, de tal forma que um adversário passivo não a
+obtenha, porém o protocolo não garante proteção contra um adversário ativo,
+esse capaz de interceptar, modificar ou injetar mensagens.Nenhuma das partes
+tem garantias da identidade da fonte da mensagem recebida ou da parte que
+saberá a chave resultante\cite{katz1996handbook}, por isso tal protocolo falha
+em resistir a ataques de um adversário ativo como será apresentado na seção
 \ref{sec:vulnerabilidade_protocolo}.
 
-Posteriormente o protocolo foi aprimorado para resistir a adversários ativos. Para que isso seja feito, a chave gerada por cada uma das partes é encriptada utilizando a chave privada de cada uma das partes. Dessa maneira, quando o receptor recebe a mensagem, ele utiliza a chave pública do emissor para verificar se quem enviou aquela mensagem realmente é quem diz ser. Dessa maneira é evitado o problema de ataques como \textit{man-in-the-middle}.
+Posteriormente o protocolo foi aprimorado para resistir a adversários ativos.
+Para que isso seja feito, a chave gerada por cada uma das partes é encriptada
+utilizando a chave privada de cada uma das partes. Dessa maneira, quando o
+receptor recebe a mensagem, ele utiliza a chave pública do emissor para
+verificar se quem enviou aquela mensagem realmente é quem diz ser. Dessa
+maneira é evitado o problema de ataques como \textit{man-in-the-middle}.
 
 \subsection{Exemplo Ilustrativo}
 \label{sub:exemplo_ilustrativo}
@@ -229,19 +239,32 @@ Até o momento mencionamos apenas chaves simétricas, aquela ao qual ambos, Alic
 \subsection{Chaves Assimétricas}
 \label{sub:chaves_assimetricas}
 
+\begin{figure}[htpb]
+    \centering
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{simassim.pdf_tex}
+    \caption{Exemplo a) criptografia simétrica, chave que cifra e decifra
+        são as mesmas, já para b) criptografia assimétrica, a chave que
+        cifra é diferente da que decifra.}%
+    \label{fig:sim_assim}
+\end{figure}
+
 \subsection{Modelo de Correção}
 \label{sub:modelo_correcao}
-Chaves assimétricas poderiam ser usadas como substituição da Diffie-Hellman, porém estás não seriam chaves por seção, mas sim durante todo o histórico, ou seja, caso um
-adversário obtenha uma das chaves privadas, este poderá ter acesso a todo o histórico
-de comunicação daquela chave, outra desvantagem de tais chaves é que tem um alto custo computacional e para comunicações instantâneas não oferece uma experiência agradável devido sua latência.
+Chaves assimétricas poderiam ser usadas como substituição da Diffie-Hellman,
+porém estas não seriam chaves por seção, mas sim durante todo o histórico, ou
+seja, caso um adversário obtenha uma das chaves privadas, este poderá ter
+acesso a todo o histórico de comunicação daquela chave, outra desvantagem de
+tais chaves é que tem um alto custo computacional e para comunicações
+instantâneas não oferece uma experiência agradável devido sua latência.
 
-Com os problemas apresentados pelas chaves-assimétricas, é visível ainda a necessidade
-de usar chaves-simétricas para comunicação segura e o protocolo Diffie-Hellman ainda
-se mostra eficaz.
+Com os problemas apresentados pelas chaves-assimétricas, é visível ainda a
+necessidade de usar chaves-simétricas para comunicação segura e o protocolo
+Diffie-Hellman ainda se mostra eficaz.
 
 %% descrever
 
-Embora chaves assimétricas adicionem uma camada a mais de proteção na momento de
+Embora chaves assimétricas adicionem um mecanismo de proteção na momento de
 se estabelecer a chave, inviabilizando o ataque apresentado pela secção anterior,
 ainda existem outras possibilidades de ataque para esse tipo de criptografia
 (assimétrica), que vai além do escopo desse trabalho, mas devem ser consideradas
