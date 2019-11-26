@@ -28,7 +28,7 @@
 \begin{abstract}
     O esquema de troca de chaves proposto por Whitfield Diffie e
     Martin Hellman em 1976 é protocolo para realizar
-    o intercambio de chaves criptograficas por meio de um canal público
+    o intercambio de chaves criptográficas por meio de um canal público
     de forma segura\cite{Diffie}. Este é um dos primeiros protocolos de
     chave publica, foi originalmente conceitualizado por Ralph Merkle
     e sua descrição formal apresentada posteriormente pelos autores que
@@ -44,7 +44,7 @@ conteúdo que esta sendo intercambiado nesse meio.
 Tal atividade e seu aprimoramento datam da grécia
 antiga\cite{katz2014introduction}, em grande parte, esses segredos eram
 estabelecidos pela substituição trivial de letras, cifração, da mensagem em que
-apriori eram estabelecidas as regras de substituição e como seria recuperado a
+\textit{apriori} eram estabelecidas as regras de substituição e como seria recuperado a
 mensagem original. Esses esquemas posteriormente apresentaram diversas
 limitações, pois conhecendo o esquema, se tornava trivial a decifração da
 mensagem.
@@ -54,15 +54,24 @@ comunicação segura precisou ser reinventada\cite{singh1999code}, tais mecanism
 permitiam facilmente quebrar esquemas antigos porém propiciaram novas formas de
 se codificar mensagens secretas\cite{Diffie}.
 
-%%% FALAR DE SEGREDO PERFEITO Não DETALHAR MUITO, REFERENCIAR
-%%% SUB:SEGREDO_PERFEITO E LIMITACOES E DEPOIS INTRODUZIR CHAVES SIMETRICAS
+Mesmo com o enorme poderio que tais máquinas propiciaram existem limites do ponto
+de vista prático, fatores físicos, teóricos e tecnológicos a respeito da computação
+impõe limites em um dado momento do que pode ou não ser viável de ser feito por
+um computador, isso inclui a criptografia.
 
-Inicialmente a comunicação segura entre pares requeria que de antemão fossem
-trocadas chaves por um meio fisico seguro, usualmente, cartas com a chave
-anotadas eram transportadas por entregadores de confiança, esses usavam de
+Existe um esquemas criptográficos que é seguros mesmo contra um adversário que tenha
+um poder computacional infinito, esse é chamado de segredo perfeito
+\cite{katz2014introduction}, o qual foi introduzido por Frank Miller em
+1882\cite{frankm} e posteriormente provada sua invulnerabilidade teórica
+por Claude Shannon\cite{shannon1949communication}.
+
+De forma breve, o protocolo requere gerar um número puramente aleatório do tamanho das
+mensagens trocadas, intercambiar chaves sem vazamentos e utiliza-las apenas uma vez\footnote{Uma descrição detalhada do segredo perfeito pode ser encontrado na
+seção \ref{sub:segredo_perfeito}}.
+Diversas formas para os diferentes critérios foram tentadas, porém usavam de
 protocolos caros e complexos\cite{matsumoto1987key,Merkle}.
 
-Tal ritual seria impraticável para grupos que detinham pouco poder economico,
+Tal ritual seria impraticável para grupos que detinham pouco poder econômico,
 surgindo então a busca por formas praticáveis de se distribuir chaves para o
 estabelecimento de comunicação segura, dessa busca surgiram os trabalhos de
 Ralph Merkle, Whitfield Diffie e Martin Hellman.
@@ -71,26 +80,27 @@ O protocolo Diffie-Hellman forneceu a primeira solução viável ao problema
 de distribuição de chaves, permitindo duas partes, que inicialmente não se
 conhecem ou trocaram qualquer material, estabelecer um segredo compartilhado
 (uma chave de encriptação) em um canal aberto, essa chave pode então
-subsequentemente ser usada para criptografia simetrica. A segurança se
+subsequentemente ser usada para criptografia simétrica. A segurança se
 estabelece pela intratabilidade do problema de
-Diffie-Hellman\cite{katz1996handbook} e computação de logarítmos
-discretos\footnote{A dificultade de se computar logarítmos discretos e
+Diffie-Hellman\cite{katz1996handbook} e computação de logaritmos
+discretos\footnote{A dificuldade de se computar logaritmos discretos é
 apresentada na seção \ref{sub:logaritmo_discreto}}.
 
 \section{O Protocolo}%
 \label{sec:o_protocolo}
 
 A versão básica do protocolo, provê proteção na forma de gerar uma
-chave em comum entre os pares, sendo que um adversário passivo não a obtenha,
+chave em comum entre os pares, de tal forma que um adversário passivo não a obtenha,
 porém o protocolo não garante proteção contra um adversário ativo, esse capaz
-de interceptar, modificar ou injetar mensagens. Nenhuma das partes tem
+de interceptar, modificar ou injetar mensagens.Nenhuma das partes tem
 garantias da identidade da fonte da mensagem recebida ou da parte que saberá
-a chave resultante\cite{katz1996handbook}.
+a chave resultante\cite{katz1996handbook}, por isso tal protocolo falha em
+resistir a ataques de um adversário ativo como será apresentado na seção
+\ref{sec:vulnerabilidade_protocolo}.
 
-Posteriormente o protocolo foi aprimorado para resistir a adversários ativos.
-%%FALAR DE FORMA BREVE COMO RESISTE A ADVERSARIOS ATIVOS
+Posteriormente o protocolo foi aprimorado para resistir a adversários ativos. Para que isso seja feito, a chave gerada por cada uma das partes é encriptada utilizando a chave privada de cada uma das partes. Dessa maneira, quando o receptor recebe a mensagem, ele utiliza a chave pública do emissor para verificar se quem enviou aquela mensagem realmente é quem diz ser. Dessa maneira é evitado o problema de ataques como \textit{man-in-the-middle}.
 
-\subsection{Exemplo Ilustrativo}%
+\subsection{Exemplo Ilustrativo}
 \label{sub:exemplo_ilustrativo}
 Para o exemplo ilustrativo, supomos que dois entes, Alice e Bob, querem pintar
 seus quartos de uma mesma cor sem que Charlie, que busca impedir essa amizade,
@@ -188,7 +198,7 @@ De forma simplificada,
 Nesse esquema é visto que a chave $\alpha$ não é conhecido por ninguém alem de Alice,
 a chave $\beta$ não é conhecida por ninguém além de Bob e a chave $\omega$ não
 é conhecida por ninguém além do par Alice-Bob, na tabela \ref{tab:alicebob} é
-apresentada uma descrição detalhada dos niveis de acesso das chaves.
+apresentada uma descrição detalhada dos níveis de acesso das chaves.
 
 \begin{table}[ht]
     \centering
@@ -208,8 +218,43 @@ apresentada uma descrição detalhada dos niveis de acesso das chaves.
     \end{tabular}
 \end{table}
 
+\section{Vulnerabilidade do Protocolo}
+\label{sec:vulnerabilidade_protocolo}
+Como foi apontado, o Diffie-Hellman em sua forma original, não resiste a ataques de um adversário ativo, \textit{man-in-the-middle}, aqui apresentamos como um adversário que pode interceptar, modificar ou injetar mensagens no meio de comunicação poderia ter acesso as mensagens que se utilizam da versão original desse protocolo.
+
+\section{Aprimoramentos do Protocolo}
+\label{sec:aprimoramentos_protocolo}
+Até o momento mencionamos apenas chaves simétricas, aquela ao qual ambos, Alice e Bob compartilham da mesma chave, para apresentar uma forma de resistir a ataques ativos iremos introduzir um exemplo de chave assimétrica, também conhecida como chave publico-privada.
+
+\subsection{Chaves Assimétricas}
+\label{sub:chaves_assimetricas}
+
+\subsection{Modelo de Correção}
+\label{sub:modelo_correcao}
+Chaves assimétricas poderiam ser usadas como substituição da Diffie-Hellman, porém estás não seriam chaves por seção, mas sim durante todo o histórico, ou seja, caso um
+adversário obtenha uma das chaves privadas, este poderá ter acesso a todo o histórico
+de comunicação daquela chave, outra desvantagem de tais chaves é que tem um alto custo computacional e para comunicações instantâneas não oferece uma experiência agradável devido sua latência.
+
+Com os problemas apresentados pelas chaves-assimétricas, é visível ainda a necessidade
+de usar chaves-simétricas para comunicação segura e o protocolo Diffie-Hellman ainda
+se mostra eficaz.
+
+%% descrever
+
+Embora chaves assimétricas adicionem uma camada a mais de proteção na momento de
+se estabelecer a chave, inviabilizando o ataque apresentado pela secção anterior,
+ainda existem outras possibilidades de ataque para esse tipo de criptografia
+(assimétrica), que vai além do escopo desse trabalho, mas devem ser consideradas
+pelo leitor que fará uso de tal solução.
+
 \section{Conclusão}%
 \label{sec:conclusao}
+% falar que o diffie é muito usado (TLS, HTTPS, etc), ressaltar problemas e vantagens e concluir argumentando o problema importante que ele resolveu;;;; 
+
+
+\bibliographystyle{unsrt}
+\bibliography{sample}
+
 
 \section{Notas}%
 \label{sec:notas}
@@ -218,11 +263,11 @@ viabilidade e implementação do protocolo Diffie-Hellman.
 
 \subsection{Logaritmo Discreto}%
 \label{sub:logaritmo_discreto}
-Em teoria dos números, o logarítmo discreto de $\log_{b}{a}$ é algum inteiro
-$k$ tal que $b^k=a$. Logarítmos discretos são rapidamente computaveis em apenas
+Em teoria dos números, o logaritmo discreto de $\log_{b}{a}$ é algum inteiro
+$k$ tal que $b^k=a$. Logaritmos discretos são rapidamente computáveis em apenas
 alguns casos especiais. Entretanto, nenhum método eficiente é conhecido para
 a computação do caso geral. Muitos algoritmos de criptografia residem na
-dificuldade intrinseca da reversão em k e são escolhidos de forma que não se
+dificuldade intrínseca da reversão em k e são escolhidos de forma que não se
 situem nos casos de solução eficiente.
 
 \begin{definition}
@@ -245,17 +290,15 @@ situem nos casos de solução eficiente.
 \subsection{Segredo Perfeito}%
 \label{sub:segredo_perfeito}
 O esquema de segredo perfeito, também conhecido (em inglês) como, \textit{
-one-time pad}, é uma tecnica de encriptação que não pode ser quebrada, mas
+one-time pad}, é uma técnica de encriptação que não pode ser quebrada, mas
 requere o uso de uma chave \textit{one-time} pre-compartilha, que tenha o mesmo
 tamanho ou mais que a mensagem que está sendo compartilhada.
 
-A chave \textit{one-time} é uma chave usada uma unica vez e que tem seu
+A chave \textit{one-time} é uma chave usada uma única vez e que tem seu
 processo de geração puramente aleatório.
 
 %%%% In this technique, a plaintext is paired with a random secret key (also referred to as a one-time pad). Then, each bit or character of the plaintext is encrypted by combining it with the corresponding bit or character from the pad using modular addition. If the key is (1) truly random, (2) at least as long as the plaintext, (3) never reused in whole or in part, and (4) kept completely secret, then the resulting ciphertext will be impossible to decrypt or break.[1][2] It has also been proven that any cipher with the property of perfect secrecy must use keys with effectively the same requirements as OTP keys.[3] Digital versions of one-time pad ciphers have been used by nations for critical diplomatic and military communication, but the problems of secure key distribution have made them impractical for most applications. 
 %%% DETALHAR SEGREDO PERFEITO
 
 
-\bibliographystyle{unsrt}
-\bibliography{sample}
 \end{document}
